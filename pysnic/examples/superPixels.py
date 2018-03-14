@@ -1,4 +1,5 @@
-import matplotlib.image as mpimg
+from pkg_resources import resource_stream
+from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import skimage.color
@@ -10,7 +11,7 @@ from pysnic.ndim.operations_collections import nd_computations
 from pysnic.metric.snic import create_augmented_snic_distance
 
 # load image
-color_image = mpimg.imread("../data/orchid.jpg", 'r')
+color_image = np.array(Image.open(resource_stream(__name__, "../data/orchid.jpg")))
 number_of_pixels = color_image.shape[0] * color_image.shape[1]
 
 # SNIC parameters

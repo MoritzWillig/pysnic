@@ -21,6 +21,6 @@ setup(name='pysnic',
       packages=['pysnic'],
       include_package_data=True,
       extras_require={
-          'examples': ["skimage", "numpy", "matplotlib"],
+          'examples': ["skimage", "numpy", "matplotlib", "pillow"],
       },
       zip_safe=False)
