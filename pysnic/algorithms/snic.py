@@ -46,14 +46,17 @@ class Queue(object):
 
 
 def compute_grid(image_size, number_of_pixels):
+    image_size_x = float(image_size[0])
+    image_size_y = float(image_size[1])
+
     # compute grid size
-    x_y_ratio = image_size[0] / image_size[1]
+    x_y_ratio = image_size_x / image_size_y
     num_sqr = sqrt(number_of_pixels)
 
-    grid_size = [int(max(1, num_sqr * x_y_ratio) + 1), int(max(1, num_sqr / x_y_ratio) + 1)]
+    grid_size = [int(max(1.0, num_sqr * x_y_ratio) + 1), int(max(1.0, num_sqr / x_y_ratio) + 1)]
 
     # create grid
-    full_step = [image_size[0] / float(grid_size[0]), image_size[1] / float(grid_size[1])]
+    full_step = [image_size_x / float(grid_size[0]), image_size_y / float(grid_size[1])]
     half_step = [full_step[0] / 2.0, full_step[1] / 2.0]
     grid = [[[
         int(half_step[0] + x * full_step[0]),
@@ -130,9 +133,10 @@ def snic(
     nd_lerp = nd_computation.lerp
 
     if type(seeds) is int:
-        # generate fixed grid over image
-        grid = list(chain.from_iterable(compute_grid(image_size, seeds)))
-        real_number_of_pixels = seeds
+        # generate equidistant grid and flatten into list
+        grid = [seed for row in compute_grid(image_size, seeds) for seed in row]
+
+        real_number_of_pixels = len(grid)
     else:
         # assume seeds is an iterable
         grid = seeds
