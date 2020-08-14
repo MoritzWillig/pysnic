@@ -16,7 +16,7 @@ number_of_pixels = color_image.shape[0] * color_image.shape[1]
 
 # SNIC parameters
 numSegments = 100
-compactness = 10.00
+compactness = 10.0
 
 # compute grid
 grid = compute_grid(color_image.shape, numSegments)
@@ -42,6 +42,11 @@ print("superpixelation took: %fs" % (end - start))
 plt.figure("SNIC with %d segments" % numSegments)
 plt.imshow(mark_boundaries(color_image, np.array(segmentation)))
 plt.show()
+
+plt.figure("segmentations")
+plt.imshow(segmentation, cmap="prism")
+plt.show()
+
 
 # show the distance map
 plt.figure("Distances")

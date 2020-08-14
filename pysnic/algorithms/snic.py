@@ -156,7 +156,7 @@ def snic(
     # we create a priority queue and fill with the centroids itself. Since the python priority queue can not
     # handle multiple entries with the same key, we start inserting the super pixel seeds with negative values. This
     # makes sure they get processed before any other pixels. Since distances can not be negative, all new
-    # pixels will have a positive value, and therefore will be handles only after all seeds have been processed.
+    # pixels will have a positive value, and therefore will be handled only after all seeds have been processed.
     for k in range(real_number_of_pixels):
         init_centroid = centroids[k]
 
