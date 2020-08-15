@@ -25,19 +25,18 @@ compactness = 10.00
 grid = compute_grid(color_image.shape, number_of_segments)
 seeds = list(chain.from_iterable(grid))
 
-segmentation, _, number_of_segments = snic(
+segmentation, _, centroids = snic(
     lab_image.tolist(), seeds, compactness,
     update_func=lambda num_pixels: print("processed %05.2f%%" % (num_pixels * 100 / number_of_pixels)))
 
-
-rdp = RamerDouglasPeucker(10)
+rdp = RamerDouglasPeucker(5)
 graphs = polygonize(segmentation, seeds, rdp)
 
 for vertices, edges in graphs:
-    fig = plt.figure("SNIC with %d segments" % number_of_segments)
+    fig = plt.figure("SNIC with %d segments" % len(centroids))
     plt.imshow(mark_boundaries(color_image, np.array(segmentation)))
     for x,y in vertices.keys():
-        plt.scatter(x, y)
+        plt.scatter(x + 0.5, y + 0.5)
     for edge in edges:
-        plt.plot([p[0] for p in edge], [p[1] for p in edge])
+        plt.plot([p[0] + 0.5 for p in edge], [p[1] + 0.5 for p in edge])
 plt.show()

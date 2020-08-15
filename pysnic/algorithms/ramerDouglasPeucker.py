@@ -2,6 +2,16 @@ from math import sqrt
 
 
 def get_segment_distance(begin, end, point):
+    """
+    Computes the closest distance between the line segment (begin, end) and a given point.
+    :param begin: Start of the line segment.
+    :type begin: [float, float]
+    :param end: End of the line segment.
+    :type end: [float, float]
+    :param point: Position to measure the distance to.
+    :type point: [float, float]
+    :return: Closest distance between the point and the line segment.
+    """
     ex = end[0] - begin[0]
     ey = end[1] - begin[1]
     px = point[0] - begin[0]

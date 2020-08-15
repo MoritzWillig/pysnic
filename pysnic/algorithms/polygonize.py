@@ -245,19 +245,28 @@ def trace_edges(segmentation):
 
 def trace_isles(vertices, seeds, segmentation):
     """
+    Searches for undetected edges in the segmentation.
 
-    :param vertices: positions that are already discovered
-    :param seeds:
-    :param segmentation:
+    When searching for edges with trace_edges, the algorithm starts at the image border.
+    Segments that are however enclosed by another segment can not be reached via an edge and
+    have to be searched separately.
+
+    To avoid a full image search, we make use of the super-pixel seeds, which are
+    known to always lie within the super-pixels.
+
+    This is a simplified trace_edges that does not perform bounds checks,
+    since we assume that all these areas have already been found by trace_edges
+
+    :param vertices: list of vertices that already got discovered
+    :param seeds: List of position that lie within each area
+    :param segmentation: Image segmentation
     :return:
     """
-    # this in fact a simplified trace_edges that does not perform bounds checks
-    # <=> assumes that none of the areas touches image borders.
     height = len(segmentation)
     width = len(segmentation[0])
 
     # find indices we did not capture
-    seed_idcs = {segmentation[seed[0]][seed[1]]: i for i, seed in enumerate(seeds)}
+    seed_idcs = {segmentation[seed[1]][seed[0]]: i for i, seed in enumerate(seeds)}
     missing_seed_ids = set(range(len(seeds)))
     discovered_idcs = set([
         seed_idcs[idx]
@@ -270,7 +279,7 @@ def trace_isles(vertices, seeds, segmentation):
     graphs = []
     while len(missing_seed_ids) != 0:
         idx2 = missing_seed_ids.pop()
-        py, px = seeds[idx2]
+        px, py = seeds[idx2]
         idx = segmentation[py][px]
 
         # move upwards until we encounter a boundary
@@ -296,8 +305,9 @@ def trace_isles(vertices, seeds, segmentation):
         graphs.append((vertices, edges))
 
         discovered_idcs = set([
-            seed_idcs[idx] for idx in get_neighbourhood_unsafe(px, py, segmentation)
-            for px, py in vertices])
+            seed_idcs[idx]
+            for pxx, pyy in vertices
+            for idx in get_neighbourhood_unsafe(pxx, pyy, segmentation)])
         missing_seed_ids = missing_seed_ids.difference(discovered_idcs)
 
     return graphs
@@ -356,7 +366,6 @@ def trace_edges_unsafe(ex, ey, direction, segmentation):
             px += 1
         elif direction == 1:  # TOP
             pass
-            #px += 1
         elif direction == 2:  # LEFT
             py += 1
         elif direction == 3:  # BOTTOM
