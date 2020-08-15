@@ -17,11 +17,11 @@ number_of_segments = 100
 compactness = 10.00
 
 
-segmentation, _, number_of_segments = snic(
+segmentation, _, centroids = snic(
     lab_image, number_of_segments, compactness,
     update_func=lambda num_pixels: print("processed %05.2f%%" % (num_pixels * 100 / number_of_pixels)))
 
 # show the output of SNIC
-fig = plt.figure("SNIC with %d segments" % number_of_segments)
+fig = plt.figure("SNIC with %d segments" % len(centroids))
 plt.imshow(mark_boundaries(color_image, np.array(segmentation)))
 plt.show()

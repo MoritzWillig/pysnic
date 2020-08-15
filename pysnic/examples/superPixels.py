@@ -16,7 +16,7 @@ number_of_pixels = color_image.shape[0] * color_image.shape[1]
 
 # SNIC parameters
 numSegments = 100
-compactness = 10.00
+compactness = 10.0
 
 # compute grid
 grid = compute_grid(color_image.shape, numSegments)
@@ -29,7 +29,7 @@ distance_metric = create_augmented_snic_distance(color_image.shape, seed_len, co
 
 start = timer()
 
-segmentation, distances, numSegments = snic(
+segmentation, distances, centroids = snic(
     skimage.color.rgb2lab(color_image).tolist(),
     seeds,
     compactness, nd_computations["3"], distance_metric,
@@ -39,8 +39,12 @@ end = timer()
 print("superpixelation took: %fs" % (end - start))
 
 # show the output of SNIC
-plt.figure("SNIC with %d segments" % numSegments)
+plt.figure("SNIC with %d segments" % len(centroids))
 plt.imshow(mark_boundaries(color_image, np.array(segmentation)))
+plt.show()
+
+plt.figure("segmentations")
+plt.imshow(segmentation, cmap="prism")
 plt.show()
 
 # show the distance map

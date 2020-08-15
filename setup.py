@@ -1,26 +1,47 @@
-from setuptools import setup
+import setuptools
 
 
 def readme():
-    with open('README.rst') as f:
+    with open('README.md', 'r') as f:
         return f.read()
 
 
-setup(name='pysnic',
-      version='0.1',
-      description='SNIC super pixel algorithm',
-      long_description='Python implementation of the SNIC algorithm (https://ivrl.epfl.ch/research/snic_superpixels)',
-      keywords=['SNIC', 'super pixel', 'super pixels', 'superpixels'],
-      classifiers=[
-          'Programming Language :: Python :: 3.*',
-          'Topic :: Image Segmentation :: Super Pixels'],
-      url='https://github.com/MoritzWillig/pysnic',
-      author='Moritz Willig (python translation)',
-      author_email='moritz@rise-of-light.de',
-      license='MIT',
-      packages=['pysnic'],
-      include_package_data=True,
-      extras_require={
-          'examples': ["skimage", "numpy", "matplotlib", "pillow"],
-      },
-      zip_safe=False)
+setuptools.setup(
+    name='pysnic',
+    version='1.0',
+    description='SNIC superpixels algorithm',
+    long_description='''
+Python-only implementation of the SNIC superpixels algorithm (https://www.epfl.ch/labs/ivrl/research/snic-superpixels/).
+
+Typical usage example:
+::
+
+    from pysnic.algorithms.snic import snic
+
+    segmentation, distance_map, number_of_segments = snic(
+        lab_image, 500, 0.01,
+        update_func=lambda num_pixels: print("processed %05.2f%%" % (num_pixels * 100 / number_of_pixels)))
+
+    rdp = RamerDouglasPeucker(10)
+    graphs = polygonize(segmentation, seeds, rdp)
+
+This project is maintained under: https://github.com/MoritzWillig/pysnic
+''',
+    keywords=["image processing", "computer vision", "image segmentation", "superpixels", "SNIC"],
+    classifiers=[
+        "Programming Language :: Python :: 3.5",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Scientific/Engineering :: Image Recognition"],
+    url='https://github.com/MoritzWillig/pysnic',
+    author='Moritz Willig',
+    author_email='moritz@rise-of-light.de',
+    license='MIT',
+    packages=setuptools.find_packages(),
+    include_package_data=True,
+    extras_require={
+        'examples': ["skimage", "numpy", "matplotlib", "pillow"],
+    },
+    zip_safe=False,
+    python_requires='>=3.5'
+)
