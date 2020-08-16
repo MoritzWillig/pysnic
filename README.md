@@ -11,6 +11,12 @@ segmentation, distance_map, number_of_segments = snic(
 See the [examples](pysnic/examples) folder for a minimal and more advanced example of the SNIC algorithm, as well as a
 graph extraction and polygonization.
 
+## Installing PySNIC
+If you use `pip`, you can install PySNIC with:
+```
+pip install pysnic
+```
+
 ## Technical details
 The algorithm in this repository differs from the originally described algorithm to improve performance:
 * Adding elements to the candidate queue is a costly operation. We therefore try to reduce the number queue insertions.
@@ -19,7 +25,7 @@ The algorithm in this repository differs from the originally described algorithm
 
 ### Performance
 This repository contains a *python only* implementation. Due to large numbers of single-pixel image accesses the python
-internal bounds-checking, is likely to slow down the runtime compared to an C/C++ implementation.
+internal bounds-checking is likely to slow down the runtime compared to a C/C++ implementation.
 
 Since the algorithm performs large amounts of single pixel accesses, the runtime is greatly reduced by **converting
 numpy arrays to *'raw'* python arrays** before passing them to the `snic`-method.
