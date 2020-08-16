@@ -17,6 +17,8 @@ Typical usage example:
 ::
 
     from pysnic.algorithms.snic import snic
+    from pysnic.algorithms.polygonize import polygonize
+    from pysnic.algorithms.ramerDouglasPeucker import RamerDouglasPeucker
 
     segmentation, distance_map, number_of_segments = snic(
         lab_image, 500, 0.01,
