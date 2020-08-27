@@ -34,8 +34,8 @@ The algorithm in this repository differs from the originally described algorithm
 This repository contains a *python only* implementation. Due to large numbers of single-pixel image accesses the python
 internal bounds-checking is likely to slow down the runtime compared to a C/C++ implementation.
 
-Since the algorithm performs large amounts of single pixel accesses, the runtime is greatly reduced by **converting
-numpy arrays to normal python arrays** (in contrast to using `numpy.ndarray`s or `PIL.image`s) before passing them to the `snic`-method.
+Since the algorithm performs large amounts of single pixel accesses, the runtime is greatly reduced by **passing
+'normal' python arrays** (in contrast to using `numpy.ndarray`s or `PIL.image`s) to the `snic`-method.
 
 ### Dataformats
 Pixel positions are expected to be [x,y] integer coordinates. The coordinate frame for edge positions is offset by 0.5.
