@@ -2,10 +2,17 @@
 Python-only implementation of the SNIC superpixels algorithm (https://www.epfl.ch/labs/ivrl/research/snic-superpixels/).
 ```python
 from pysnic.algorithms.snic import snic
+from pysnic.algorithms.polygonize import polygonize
+from pysnic.algorithms.ramerDouglasPeucker import RamerDouglasPeucker
 
-segmentation, distance_map, number_of_segments = snic(
+# compute segmentation from image
+segmentation, distance_map, centroids = snic(
     lab_image, 500, 0.01,
-    update_func=lambda num_pixels: print("processed %05.2f%%" % (num_pixels * 100 / number_of_pixels)))
+    update_func=lambda processed_pixels: print("processed %05.2f%%" % (processed_pixels * 100 / number_of_pixels)))
+
+# compute polygonization from segmentation
+rdp = RamerDouglasPeucker(10)
+graphs = polygonize(segmentation, seeds, rdp)
 ```
 
 See the [examples](pysnic/examples) folder for a minimal and more advanced example of the SNIC algorithm, as well as a
@@ -28,7 +35,7 @@ This repository contains a *python only* implementation. Due to large numbers of
 internal bounds-checking is likely to slow down the runtime compared to a C/C++ implementation.
 
 Since the algorithm performs large amounts of single pixel accesses, the runtime is greatly reduced by **converting
-numpy arrays to *'raw'* python arrays** before passing them to the `snic`-method.
+numpy arrays to normal python arrays** (in contrast to using `numpy.ndarray`s or `PIL.image`s) before passing them to the `snic`-method.
 
 ### Dataformats
 Pixel positions are expected to be [x,y] integer coordinates. The coordinate frame for edge positions is offset by 0.5.
