@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name='pysnic',
-    version='1.0.1',
+    version='1.0.2',
     description='SNIC superpixels algorithm',
     long_description='''
 Python-only implementation of the SNIC superpixels algorithm (https://www.epfl.ch/labs/ivrl/research/snic-superpixels/).

@@ -7,36 +7,23 @@ from ..ndim.lerp import lerp2
 from ..metric.snic import create_augmented_snic_distance
 
 
-class QueueElement(object):
-    __sub_index = 0
-
-    def __init__(self, key, value):
-        self._key = key
-        self.value = value
-
-    def __lt__(self, other):
-        """
-        :type other: QueueElement
-        """
-        return self._key < other._key
-
-
 class Queue(object):
     def __init__(self, _buffer_size=0):
         # TODO we perform a lot of single insertions
         # it would be more efficient to use a cache class that already contains a buffer of the maximum  heap size
         # But since heapq is implemented in C, a custom python implementation will probably be slower
         self.heap = []
+        self._sub_idx = 0
 
     def add(self, priority, value):
-        heapq.heappush(self.heap, QueueElement(priority, value))
+        heapq.heappush(self.heap, (priority, self._sub_idx, value))
+        self._sub_idx += 1
 
     def is_empty(self):
         return len(self.heap) == 0
 
     def pop_value(self):
-        item = heapq.heappop(self.heap)
-        return item.value
+        return heapq.heappop(self.heap)[2]
 
     def pop(self):
         return heapq.heappop(self.heap)
@@ -149,8 +136,8 @@ def snic(
         while True:
             # get pixel that has the currently smallest distance to a centroid
             item = q_pop()
-            candidate_distance = item._key
-            candidate = item.value
+            candidate_distance = item[0]
+            candidate = item[2]
             candidate_pos = candidate[0]
 
             # test if pixel is not already labeled
