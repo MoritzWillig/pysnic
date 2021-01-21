@@ -19,7 +19,7 @@ See the [examples](pysnic/examples) folder for a minimal and more advanced examp
 graph extraction and polygonization.
 
 ## Installing PySNIC
-If you use `pip`, you can install PySNIC with:
+Install PySNIC using `pip`:
 ```
 pip install pysnic
 ```
