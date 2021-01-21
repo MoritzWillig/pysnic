@@ -26,3 +26,23 @@ actual_number_of_segments = len(centroids)
 fig = plt.figure("SNIC with %d segments" % actual_number_of_segments)
 plt.imshow(mark_boundaries(color_image, np.array(segmentation)))
 plt.show()
+
+# to numpy: segmentation.shape = (400, 600, 3)
+segmentation = np.array(segmentation)
+
+# create segment masks
+segment_masks = [segmentation == segment_idx for segment_idx in range(actual_number_of_segments)]
+# select pixels per segment. [number_of_segments](n, 3) [n=number of pixels per segment]
+segment_vectors = [color_image[segment_masks[segment_idx], :] for segment_idx in range(actual_number_of_segments)]
+
+# post-process the individual segment vectors (N, 3)
+post_image = np.empty_like(color_image)
+for segment_idx in range(actual_number_of_segments):
+    average = np.mean(segment_vectors[segment_idx], 0)
+
+    print(f"Segment {segment_idx} average: {average}")
+    post_image[segment_masks[segment_idx], :] = average
+
+fig = plt.figure("Post-processed image")
+plt.imshow(post_image)
+plt.show()
